@@ -1,6 +1,9 @@
+from pathlib import Path
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
+
 from fake_useragent import UserAgent
 
 
@@ -18,7 +21,7 @@ def parse_data_from_site(order_number):
     # Url + driver
     url = 'http://remontprinterov.com/servis'
     driver = webdriver.Chrome(
-        executable_path='/home/master/Documents/github/inksystem_order_tg_bot/chromedriver/chromedriver',
+        executable_path=Path(__file__).parent / 'chromedriver/chromedriver',
         options=options,
     )
 
@@ -44,3 +47,7 @@ def parse_data_from_site(order_number):
         driver.quit()
 
     return data
+
+
+if __name__ == '__main__':
+    print(parse_data_from_site(2201020))
