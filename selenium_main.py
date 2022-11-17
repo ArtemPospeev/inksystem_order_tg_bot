@@ -27,7 +27,7 @@ def get_data_with_xpath(driver, xpath):
 
 def make_beautiful_answer(*args):
     ''' Собирает строки в красивый ответ '''
-    return '\n'.join(*args)
+    return '\n'.join(args)
 
 
 def parse_data_from_site(order_number):
