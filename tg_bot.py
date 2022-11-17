@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-
 import telebot
 from dotenv import load_dotenv
 
@@ -19,7 +18,9 @@ def telegram_bot(token):
     def start_message(message):
         bot.send_message(
             message.chat.id,
-            f'Привет, я бот, который помогает узнать информацию по Вашему заказ-наряду.',
+            f'Привет, я бот, который помогает узнать информацию по Вашему заказ-наряду. '
+            f'Введите его номер (например 2201010)',
+
         )
 
     @bot.message_handler(content_types=['text'])
