@@ -7,7 +7,6 @@ from loguru import logger
 
 from selenium_main import parse_data_from_site
 
-
 # load environment variables
 BASE_DIR = Path(__file__).resolve().parent
 FILE_DIR = BASE_DIR / 'files_ru/'
@@ -17,7 +16,11 @@ load_dotenv(dotenv_path=dot_env)
 
 
 def give_data_from_file(file: str) -> str:
-    ''' Возвращает содержимое файла '''
+    '''
+    Возвращает содержимое файла
+    :param file: str - путь до файла
+    :return str - содержимое файла
+    '''
     with open(FILE_DIR / (file + '.txt'), 'r', encoding=CODING) as f:
         text = f.read()
     return text
@@ -53,6 +56,7 @@ def telegram_bot(token):
     @bot.message_handler(content_types=['text'])  # Обработка входящего сообщения от пользователя
     def message_reply(message):
 
+        # Сначала обрабатываем все кнопки (если к нам пришел от пользователя текст):
         if message.text == "Статус ремонта":
             response = 'Отправьте номер заказ-наряда в сообщении'
 
@@ -81,7 +85,7 @@ def telegram_bot(token):
         else:
             response = 'Я не знаю такой команды :('
 
-        bot.send_message(message.chat.id, response)  # Отправка ответа на текст.
+        bot.send_message(message.chat.id, response)  # Отправка ответа пользователю.
 
     bot.infinity_polling(none_stop=True, interval=0)  # Бесконечный цикл для бота
 
