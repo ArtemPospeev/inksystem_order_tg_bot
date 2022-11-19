@@ -1,9 +1,12 @@
 import os
 from pathlib import Path
-import telebot
 from dotenv import load_dotenv
-from telebot import types
+
+from telebot import types, telebot
+from loguru import logger
+
 from selenium_main import parse_data_from_site
+
 
 # load environment variables
 BASE_DIR = Path(__file__).resolve().parent
@@ -13,8 +16,8 @@ dot_env = BASE_DIR / '.env'
 load_dotenv(dotenv_path=dot_env)
 
 
-def give_data_from_file(file):
-    ''' Читает файл, вытаскивает содержимое'''
+def give_data_from_file(file: str) -> str:
+    ''' Возвращает содержимое файла '''
     with open(FILE_DIR / (file + '.txt'), 'r', encoding=CODING) as f:
         text = f.read()
     return text
@@ -23,10 +26,10 @@ def give_data_from_file(file):
 def telegram_bot(token):
     bot = telebot.TeleBot(token)
 
-    @bot.message_handler(commands=['start'])
+    @bot.message_handler(commands=['start'])  # Обработка команды старт
     def start_message(message):
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        buttons = [types.KeyboardButton('Статус ремонта'),
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)  # Инициализируем клавиатуру
+        buttons = [types.KeyboardButton('Статус ремонта'),  # Кнопки
                    types.KeyboardButton('Коды ошибок '),
                    types.KeyboardButton('Промывка головки'),
                    types.KeyboardButton('Профилактика СНПЧ'),
@@ -35,7 +38,7 @@ def telegram_bot(token):
                    types.KeyboardButton('Отправка в СЦ'),
                    ]
         markup.add(*buttons)
-        bot.send_message(message.chat.id,
+        bot.send_message(message.chat.id,  # Отправка сообщения после /start
                          f'🚀*Привет. Я InkSystem Bot. Я могу:*\n\n'
                          f'1⃣ Показать текущий статус ремонта заказ-наряда\n\n'
                          f'2⃣ Показать расшифровку ошибок на печатающих устройствах Epson\n\n'
@@ -47,7 +50,7 @@ def telegram_bot(token):
                          reply_markup=markup,
                          parse_mode='Markdown')
 
-    @bot.message_handler(content_types=['text'])
+    @bot.message_handler(content_types=['text'])  # Обработка входящего сообщения от пользователя
     def message_reply(message):
 
         if message.text == "Статус ремонта":
@@ -73,13 +76,14 @@ def telegram_bot(token):
 
         elif message.text.isnumeric() and len(message.text) == 7:
             response = parse_data_from_site(message.text)
+            # В этом блоке if проверяем, надо ли нам делать запрос к сайту (длина строки и состоит только из цифр)
 
         else:
             response = 'Я не знаю такой команды :('
 
-        bot.send_message(message.chat.id, response)
+        bot.send_message(message.chat.id, response)  # Отправка ответа на текст.
 
-    bot.infinity_polling(none_stop=True, interval=0)
+    bot.infinity_polling(none_stop=True, interval=0)  # Бесконечный цикл для бота
 
 
 def main():
