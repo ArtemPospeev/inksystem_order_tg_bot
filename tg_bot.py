@@ -15,9 +15,10 @@ dot_env = BASE_DIR / '.env'
 load_dotenv(dotenv_path=dot_env)
 
 # init logger
-logger.add("debug.log", format='{time} {level} {message', level='DEBUG')
+logger.add("debug.log", format='{time} {level} {message', level='DEBUG', rotation='10 KB', compression='zip')
 
 
+@logger.catch
 def give_data_from_file(file: str) -> str:
     '''
     Возвращает содержимое файла
@@ -29,6 +30,7 @@ def give_data_from_file(file: str) -> str:
     return text
 
 
+@logger.catch
 def telegram_bot(token):
     bot = telebot.TeleBot(token)
 

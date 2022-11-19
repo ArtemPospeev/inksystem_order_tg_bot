@@ -40,6 +40,7 @@ def add_emoji(emoji: str, other_data: str) -> str:
     return f'{emoji} {other_data}'
 
 
+@logger.catch
 def get_data_from_xpath(driver: webdriver, xpath: str) -> str:
     '''
     Возвращает элемент со страницы по xpath'у \n
@@ -50,6 +51,7 @@ def get_data_from_xpath(driver: webdriver, xpath: str) -> str:
     return f'{driver.find_element("xpath", f"{xpath}").text}'
 
 
+@logger.catch
 def make_beautiful_answer(*args) -> str:
     '''
     Собирает строки в красивый ответ \n
@@ -62,6 +64,7 @@ def make_beautiful_answer(*args) -> str:
     return res
 
 
+@logger.catch
 def init_browser(headless: bool = True) -> webdriver:
     '''
     Инициализирует браузер с опциями, возвращает driver \n
@@ -88,6 +91,7 @@ def init_browser(headless: bool = True) -> webdriver:
     return driver
 
 
+@logger.catch
 def parse_data_from_site(order_number: str | int, url: str = URL) -> str:
     driver = init_browser()
 
