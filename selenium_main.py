@@ -1,4 +1,5 @@
 from pathlib import Path
+from loguru import logger
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -24,6 +25,9 @@ emoji_list = [
 
 # url
 URL = 'http://remontprinterov.com/servis'
+
+# init logger
+logger.add("debug.log", format='{time} {level} {message', level='DEBUG')
 
 
 def add_emoji(emoji: str, other_data: str) -> str:
@@ -64,6 +68,8 @@ def init_browser(headless: bool = True) -> webdriver:
     :param headless= Bool \n
     :return selenium.driver
     '''
+    logger.info(' Отправляен запрос на сайт ')
+
     # web driver options
     options = webdriver.ChromeOptions()
 
@@ -118,15 +124,17 @@ def parse_data_from_site(order_number: str | int, url: str = URL) -> str:
 
     except NoSuchElementException:  # Не нашли элемент на странице (скорее всего упал сайт)
         data = 'Проблемы с доступом к базе данных. Попробуйте позже'
+        logger.error('Не удалось отправить запрос на сайт/ не удалось распарсить элементы')
 
     except Exception as err:  # На всякий случай ловим всем остальные ошибки.
-        print(err)
-        data = f'{err}\nПроизошла ошибка, пожалуйста, сообщите о ней сотрудникам компании'
+        logger.error(f'{err}\n')
+        data = f'Произошла ошибка, пожалуйста, сделайте скрин и сообщите о ней сотрудникам компании'
 
     finally:
         driver.close()
         driver.quit()
 
+    logger.info('Данные с сайта успешно получены')
     return data
 
 

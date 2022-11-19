@@ -14,6 +14,9 @@ CODING = 'UTF-8'
 dot_env = BASE_DIR / '.env'
 load_dotenv(dotenv_path=dot_env)
 
+# init logger
+logger.add("debug.log", format='{time} {level} {message', level='DEBUG')
+
 
 def give_data_from_file(file: str) -> str:
     '''
@@ -31,6 +34,7 @@ def telegram_bot(token):
 
     @bot.message_handler(commands=['start'])  # Обработка команды старт
     def start_message(message):
+        logger.info(f'Новое обращение к боту от пользователя {message.chat.id}')
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)  # Инициализируем клавиатуру
         buttons = [types.KeyboardButton('Статус ремонта'),  # Кнопки
                    types.KeyboardButton('Коды ошибок '),
@@ -85,6 +89,7 @@ def telegram_bot(token):
         else:
             response = 'Я не знаю такой команды :('
 
+        logger.info('Отправлен ответ пользователю')
         bot.send_message(message.chat.id, response)  # Отправка ответа пользователю.
 
     bot.infinity_polling(none_stop=True, interval=0)  # Бесконечный цикл для бота
