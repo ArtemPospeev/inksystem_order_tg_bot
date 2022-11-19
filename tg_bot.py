@@ -3,7 +3,6 @@ from pathlib import Path
 import telebot
 from dotenv import load_dotenv
 from telebot import types
-
 from selenium_main import parse_data_from_site
 
 # load environment variables

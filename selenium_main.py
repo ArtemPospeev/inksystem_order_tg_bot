@@ -1,10 +1,9 @@
 from pathlib import Path
 
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
-
-from fake_useragent import UserAgent
 
 # emoji
 emoji_order_number = '⚒'
@@ -31,12 +30,8 @@ def make_beautiful_answer(*args):
 
 
 def parse_data_from_site(order_number):
-    # user agent
-    user_agent = UserAgent()
-
     # options
     options = webdriver.ChromeOptions()
-    options.add_argument(f'user-agent={user_agent.opera}')
 
     # headless mode
     options.add_argument('--headless')
@@ -44,7 +39,7 @@ def parse_data_from_site(order_number):
     # Url + driver
     url = 'http://remontprinterov.com/servis'
     driver = webdriver.Chrome(
-        executable_path=Path(__file__).parent / 'chromedriver/chromedriver',
+        service=Service(Path(__file__).parent / 'chromedriver/chromedriver'),
         options=options,
     )
 
