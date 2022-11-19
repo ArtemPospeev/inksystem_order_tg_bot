@@ -27,7 +27,7 @@ emoji_list = [
 URL = 'http://remontprinterov.com/servis'
 
 # init logger
-logger.add("debug.log", format='{time} {level} {message', level='DEBUG')
+logger.add("debug.log", format='{time} {level} {message}', level='DEBUG', rotation='10 MB', compression='zip')
 
 
 def add_emoji(emoji: str, other_data: str) -> str:
@@ -40,7 +40,6 @@ def add_emoji(emoji: str, other_data: str) -> str:
     return f'{emoji} {other_data}'
 
 
-@logger.catch
 def get_data_from_xpath(driver: webdriver, xpath: str) -> str:
     '''
     Возвращает элемент со страницы по xpath'у \n
@@ -64,7 +63,6 @@ def make_beautiful_answer(*args) -> str:
     return res
 
 
-@logger.catch
 def init_browser(headless: bool = True) -> webdriver:
     '''
     Инициализирует браузер с опциями, возвращает driver \n
@@ -92,7 +90,7 @@ def init_browser(headless: bool = True) -> webdriver:
 
 
 @logger.catch
-def parse_data_from_site(order_number: str | int, url: str = URL) -> str:
+def parse_data_from_site(order_number: str or int, url: str = URL) -> str:
     driver = init_browser()
 
     try:  # Отливливаем исключения при поиске элементов
@@ -117,6 +115,7 @@ def parse_data_from_site(order_number: str | int, url: str = URL) -> str:
         appearance = get_data_from_xpath(driver, "/html/body/div[1]/section/div/div/div/table/tbody/tr[8]")
 
         # Собираем ответ
+        logger.info('Данные с сайта успешно получены')
         data = make_beautiful_answer(
             order_number,
             start_date,
@@ -138,9 +137,8 @@ def parse_data_from_site(order_number: str | int, url: str = URL) -> str:
         driver.close()
         driver.quit()
 
-    logger.info('Данные с сайта успешно получены')
     return data
 
 
 if __name__ == '__main__':
-    print(parse_data_from_site(2201020))
+    print(parse_data_from_site(220120))
