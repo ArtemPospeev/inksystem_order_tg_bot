@@ -6,6 +6,14 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 
+# XPath
+XPATH_ORDER_NUMBER = "/html/body/div[1]/section/div/div/div/table/tbody/tr[1]"
+XPATH_START_DATE = "/html/body/div[1]/section/div/div/div/table/tbody/tr[2]"
+XPATH_ORDER_STATUS = "/html/body/div[1]/section/div/div/div/table/tbody/tr[3]"
+XPATH_DEVICE_NAME = "/html/body/div[1]/section/div/div/div/table/tbody/tr[5]"
+XPATH_BREAKDOWN_DESC = "/html/body/div[1]/section/div/div/div/table/tbody/tr[7]"
+XPATH_APPEARANCE = "/html/body/div[1]/section/div/div/div/table/tbody/tr[8]"
+
 # emoji
 emoji_order_number = '⚒'
 emoji_start_date = '📆'
@@ -102,17 +110,17 @@ def parse_data_from_site(order_number: str or int, url: str = URL) -> str:
         order_input.send_keys(Keys.ENTER)  # Отправляем запрос (через нажатие Enter)
 
         # Ниже парсим по XPath все нужные столбцы таблицы
-        order_number = get_data_from_xpath(driver, "/html/body/div[1]/section/div/div/div/table/tbody/tr[1]")
+        order_number = get_data_from_xpath(driver, XPATH_ORDER_NUMBER)
 
-        start_date = get_data_from_xpath(driver, "/html/body/div[1]/section/div/div/div/table/tbody/tr[2]")
+        start_date = get_data_from_xpath(driver, XPATH_START_DATE)
 
-        order_status = get_data_from_xpath(driver, "/html/body/div[1]/section/div/div/div/table/tbody/tr[3]")
+        order_status = get_data_from_xpath(driver, XPATH_ORDER_STATUS)
 
-        device_name = get_data_from_xpath(driver, "/html/body/div[1]/section/div/div/div/table/tbody/tr[5]")
+        device_name = get_data_from_xpath(driver, XPATH_DEVICE_NAME)
 
-        breakdown_desc = get_data_from_xpath(driver, '/html/body/div[1]/section/div/div/div/table/tbody/tr[7]')
+        breakdown_desc = get_data_from_xpath(driver, XPATH_BREAKDOWN_DESC)
 
-        appearance = get_data_from_xpath(driver, "/html/body/div[1]/section/div/div/div/table/tbody/tr[8]")
+        appearance = get_data_from_xpath(driver, XPATH_APPEARANCE)
 
         # Собираем ответ
         logger.info('Данные с сайта успешно получены')
