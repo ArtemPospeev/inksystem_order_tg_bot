@@ -135,11 +135,11 @@ def parse_data_from_site(order_number: str or int, url: str = URL) -> str:
 
     except NoSuchElementException:  # Не нашли элемент на странице (скорее всего упал сайт)
         data = 'Проблемы с доступом к базе данных. Попробуйте позже'
-        logger.error('Не удалось отправить запрос на сайт/ не удалось распарсить элементы')
+        logger.error('Не удалось распарсить элементы (возможно, менялась верстка)')
 
     except Exception as err:  # На всякий случай ловим всем остальные ошибки.
-        logger.error(f'{err}\n')
         data = f'Произошла ошибка, пожалуйста, сделайте скрин и сообщите о ней сотрудникам компании'
+        logger.error(f'{err}\n')
 
     finally:
         driver.close()

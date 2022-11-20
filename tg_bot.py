@@ -52,7 +52,7 @@ def search_in_file(search_object: str, file: str = './files_ru/errors_code.txt')
     '''
     with open(file, 'r') as f:
         for line in f.readlines():
-            if search_object in line:
+            if search_object.lower() in line.lower():
                 return line
 
     return 'Не найдено такой ошибки'
